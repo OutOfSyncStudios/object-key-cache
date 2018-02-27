@@ -169,8 +169,8 @@ class ObjectKeyCache {
         this.cache.on('error', (err) => {
           reject(err);
         });
+        this.cache.quit();
       });
-      this.cache.quit();
     } else {
       prm = Promise.reject(new Error('Cache connection is not active'));
     }
