@@ -5,6 +5,8 @@
 [![Actual version published on npm](http://img.shields.io/npm/v/@mediaxpost/object-key-cache.svg)](https://www.npmjs.org/package/@mediaxpost/object-key-cache)
 [![Travis build status](https://travis-ci.org/MediaXPost/object-key-cache.svg)](https://www.npmjs.org/package/@mediaxpost/object-key-cache)
 [![Total npm module downloads](http://img.shields.io/npm/dt/@mediaxpost/object-key-cache.svg)](https://www.npmjs.org/package/@mediaxpost/object-key-cache)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1d343b0fd03947e494cdddc2966ca79b)](https://www.codacy.com/app/chronosis/object-key-cache?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=MediaXPost/object-key-cache&amp;utm_campaign=Badge_Grade)
+[![Codacy Coverage Badge](https://api.codacy.com/project/badge/Coverage/1d343b0fd03947e494cdddc2966ca79b)](https://www.codacy.com/app/chronosis/object-key-cache?utm_source=github.com&utm_medium=referral&utm_content=MediaXPost/object-key-cache&utm_campaign=Badge_Coverage)
 [![Dependencies badge](https://david-dm.org/MediaXPost/object-key-cache/status.svg)](https://david-dm.org/MediaXPost/object-key-cache?view=list)
 
 `object-key-cache` is a promise-based, object-key, cache extension for the [Redis](https://www.npmjs.com/package/redis) and [memory-cache](https://www.npmjs.com/package/@mediaxpost/memory-cache) modules.
