@@ -8,7 +8,6 @@ const ObjectKeyCache = require('..');
 
 const testObj = { where: { dealerID: -1, offset: 0, limit: 20, table: 'vehicle' } };
 
-
 describe('Object Key Cache - MemoryCache', () => {
   let cache;
   before(async() => {
@@ -284,7 +283,6 @@ describe('Object Key Cache - MemoryCache', () => {
   //     });
   //   cache.creds.port = tmpPort;
   // });
-
   it('set (already closed)', (done) => {
     cache
       .set('TestKey', 'TestValue')

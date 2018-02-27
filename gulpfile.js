@@ -10,11 +10,7 @@ const prettyConf = require('./.prettierrc.json');
 
 const testFolder = 'test';
 
-const allJSFiles = [
-  '*.js',
-  `${testFolder}/**/*.js`,
-  `${testFolder}/*.js`
-];
+const allJSFiles = ['*.js', `${testFolder}/**/*.js`, `${testFolder}/*.js`];
 
 const esLintOpts = { configFile: '.eslintrc.json', fix: true };
 
@@ -28,18 +24,14 @@ gulp.task('lint', () => {
 });
 
 gulp.task('test', ['lint'], () => {
-  return gulp
-    .src('test.js', { read: false })
-    .pipe(mocha())
+  return gulp.src('test.js', { read: false }).pipe(mocha())
     .once('error', () => {
       process.exit(1);
     });
 });
 
 gulp.task('fix', () => {
-  return gulp
-    .src(allJSFiles)
-    .pipe(eslint(esLintOpts))
+  return gulp.src(allJSFiles).pipe(eslint(esLintOpts))
     .pipe(eslint.format())
     .pipe(eslint.failAfterError())
     .pipe(gulp.dest((file) => {
@@ -48,9 +40,7 @@ gulp.task('fix', () => {
 });
 
 gulp.task('pretty', () => {
-  return gulp
-    .src(allJSFiles)
-    .pipe(prettier(prettyConf))
+  return gulp.src(allJSFiles).pipe(prettier(prettyConf))
     .pipe(eslint(esLintOpts))
     .pipe(gulp.dest((file) => {
       return file.base;
