@@ -12,17 +12,17 @@ const memCache = new MemoryCache();
 bluebird.promisifyAll(redis.RedisClient.prototype);
 bluebird.promisifyAll(redis.Multi.prototype);
 
-const defaults = {
-  failback: true
-};
+const defaults = { failback: true };
 
 class ObjectKeyCache {
   constructor(config, credentials, logger) {
     this.logger = logger || new LogStub();
     this.isConnected = false;
-    this.cacheConfig = __.merge(Object.assign(defaults), config || {}); // config.cache;
+    this.cacheConfig = __.merge(Object.assign(defaults), config || {});
+    // config.cache;
     // this.ttl = this.cacheConfig.ttl;
-    this.creds = credentials; // config.credentials.redis;
+    this.creds = credentials;
+    // config.credentials.redis;
     this.cache = null;
   }
 
