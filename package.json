@@ -1,7 +1,7 @@
 {
-  "name": "object-cache",
+  "name": "object-key-cache",
   "version": "0.0.1",
-  "description": "An object cache extension for Redis and MemoryCache.",
+  "description": "A Promise-based, object-key, cache extension for Redis and MemoryCache.",
   "main": "index.js",
   "scripts": {
     "test": "nyc mocha",
@@ -13,19 +13,21 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MediaXPost/object-cache.git"
+    "url": "git+https://github.com/MediaXPost/object-key-cache.git"
   },
   "keywords": [
-    "base",
-    "bootstrap",
+    "object",
+    "cache",
+    "redis",
+    "memory",
     "nodejs"
   ],
   "author": "Jay Reardon",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/MediaXPost/object-cache/issues"
+    "url": "https://github.com/MediaXPost/object-key-cache/issues"
   },
-  "homepage": "https://github.com/MediaXPost/object-cache#readme",
+  "homepage": "https://github.com/MediaXPost/object-key-cache#readme",
   "devDependencies": {
     "chai": "^4.1.2",
     "codacy-coverage": "^2.0.3",

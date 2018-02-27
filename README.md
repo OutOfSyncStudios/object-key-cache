@@ -7,7 +7,7 @@
 [![Total npm module downloads](http://img.shields.io/npm/dt/@mediaxpost/object-key-cache.svg)](https://www.npmjs.org/package/@mediaxpost/object-key-cache)
 [![Dependencies badge](https://david-dm.org/MediaXPost/object-key-cache/status.svg)](https://david-dm.org/MediaXPost/object-key-cache?view=list)
 
-`object-key-cache` is a promise-based object cache extension for the [Redis](https://www.npmjs.com/package/redis) and [memory-cache](https://www.npmjs.com/package/@mediaxpost/memory-cache) modules.
+`object-key-cache` is a promise-based, object-key, cache extension for the [Redis](https://www.npmjs.com/package/redis) and [memory-cache](https://www.npmjs.com/package/@mediaxpost/memory-cache) modules.
 
 Object Key Cache provides the ability to use JavaScript Objects as keys values when committing to cache.
 
