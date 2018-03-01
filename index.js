@@ -110,6 +110,30 @@ class ObjectKeyCache {
     return Promise.reject(new Error('Cache is not connected'));
   }
 
+  getAsync(key) {
+    return this.get(key);
+  }
+
+  setAsync(key, value) {
+    return this.set(key, value);
+  }
+
+  delAsync(key) {
+    return this.del(key);
+  }
+
+  hgetAsync(hash, key) {
+    return this.hget(hash, key);
+  }
+
+  hsetAsync(hash, key, value) {
+    return this.hset(hash, key, value);
+  }
+
+  hdelAsync(hash, key) {
+    return this.hdel(hash, key);
+  }
+
   calcObjKey(objKey) {
     const str = JSON.stringify(objKey).replace(/\n/g, '');
     // Stringify JSON and flatten string
@@ -146,6 +170,30 @@ class ObjectKeyCache {
   ohdel(hash, objKey) {
     const key = this.calcObjKey(objKey);
     return this.hdel(hash, key); // returns a Promise
+  }
+
+  ogetAsync(key) {
+    return this.oget(key);
+  }
+
+  osetAsync(key, value) {
+    return this.oset(key, value);
+  }
+
+  odelAsync(key) {
+    return this.odel(key);
+  }
+
+  ohgetAsync(hash, key) {
+    return this.ohget(hash, key);
+  }
+
+  ohsetAsync(hash, key, value) {
+    return this.ohset(hash, key, value);
+  }
+
+  ohdelAsync(hash, key) {
+    return this.ohdel(hash, key);
   }
 
   // Clear the Redis Cache
