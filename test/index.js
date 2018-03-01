@@ -106,8 +106,6 @@ describe('Object Key Cache - MemoryCache', () => {
       });
   });
 
-
-
   it('hset', (done) => {
     cache
       .hset('TestKey', 'TestField', 'TestValue')
