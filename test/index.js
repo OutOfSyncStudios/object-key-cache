@@ -22,7 +22,7 @@ describe('Object Key Cache - MemoryCache', () => {
     cache
       .connect()
       .then(() => {
-        expect(cache.isConnected).to.be.equal(true);
+        expect(cache.connected).to.be.equal(true);
         done();
       })
       .catch((err) => {
@@ -261,7 +261,7 @@ describe('Object Key Cache - MemoryCache', () => {
     cache
       .close()
       .then(() => {
-        expect(cache.isConnected).to.be.equal(false);
+        expect(cache.connected).to.be.equal(false);
         done();
       })
       .catch((err) => {
@@ -439,7 +439,7 @@ describe('Object Key Cache -- Redis', () => {
     cache
       .connect()
       .then(() => {
-        expect(cache.isConnected).to.be.equal(true);
+        expect(cache.connected).to.be.equal(true);
         done();
       })
       .catch((err) => {
@@ -451,7 +451,7 @@ describe('Object Key Cache -- Redis', () => {
     cache
       .close()
       .then(() => {
-        expect(cache.isConnected).to.be.equal(false);
+        expect(cache.connected).to.be.equal(false);
         done();
       })
       .catch((err) => {
@@ -474,7 +474,7 @@ describe('Object Key Cache -- Bad Redis Credentials', () => {
     cache
       .connect()
       .then(() => {
-        expect(cache.isConnected).to.be.equal(true);
+        expect(cache.connected).to.be.equal(true);
         done();
       })
       .catch((err) => {
@@ -486,7 +486,7 @@ describe('Object Key Cache -- Bad Redis Credentials', () => {
     cache
       .close()
       .then(() => {
-        expect(cache.isConnected).to.be.equal(false);
+        expect(cache.connected).to.be.equal(false);
         done();
       })
       .catch((err) => {

@@ -17,7 +17,7 @@ const defaults = { failback: true };
 class ObjectKeyCache {
   constructor(config, credentials, logger) {
     this.logger = logger || new LogStub();
-    this.isConnected = false;
+    this.connected = false;
     this.cacheConfig = __.merge(Object.assign(defaults), config || {});
     // config.cache;
     // this.ttl = this.cacheConfig.ttl;
@@ -31,7 +31,7 @@ class ObjectKeyCache {
     return new Promise((resolve, reject) => {
       memCache.once('connect', () => {
         this.logger.debug('Cache Connected');
-        this.isConnected = true;
+        this.connected = true;
         resolve(this.cache);
       });
       memCache.once('error', (err) => {
@@ -45,7 +45,7 @@ class ObjectKeyCache {
         this.cache = redis.createClient(this.creds.port, this.creds.host, this.cacheConfig);
         this.cache.once('connect', () => {
           this.logger.debug('Cache Connected');
-          this.isConnected = true;
+          this.connected = true;
           resolve(this.cache);
         });
         this.cache.once('error', (err) => {
@@ -63,7 +63,7 @@ class ObjectKeyCache {
   }
 
   get(key) {
-    if (this.isConnected) {
+    if (this.connected) {
       return this.cache.getAsync(key);
     }
     // returns a Promise
@@ -71,7 +71,7 @@ class ObjectKeyCache {
   }
 
   set(key, value) {
-    if (this.isConnected) {
+    if (this.connected) {
       return this.cache.setAsync(key, value);
     }
     // returns a Promise
@@ -79,7 +79,7 @@ class ObjectKeyCache {
   }
 
   del(key) {
-    if (this.isConnected) {
+    if (this.connected) {
       return this.cache.delAsync(key);
     }
     // returns a Promise
@@ -87,7 +87,7 @@ class ObjectKeyCache {
   }
 
   hget(hash, key) {
-    if (this.isConnected) {
+    if (this.connected) {
       return this.cache.hgetAsync(hash, key);
     }
     // returns a Promise
@@ -95,7 +95,7 @@ class ObjectKeyCache {
   }
 
   hset(hash, key, value) {
-    if (this.isConnected) {
+    if (this.connected) {
       return this.cache.hsetAsync(hash, key, value);
     }
     // returns a Promise
@@ -103,7 +103,7 @@ class ObjectKeyCache {
   }
 
   hdel(hash, key) {
-    if (this.isConnected) {
+    if (this.connected) {
       return this.cache.hdelAsync(hash, key);
     }
     // returns a Promise
@@ -150,7 +150,7 @@ class ObjectKeyCache {
 
   // Clear the Redis Cache
   clear() {
-    if (this.isConnected) {
+    if (this.connected) {
       return this.cache.flushdbAsync();
     }
     // returns a Promise
@@ -159,11 +159,11 @@ class ObjectKeyCache {
 
   close() {
     let prm;
-    if (this.isConnected) {
+    if (this.connected) {
       prm = new Promise((resolve, reject) => {
         this.cache.on('end', () => {
           this.logger.debug('Cache Closed');
-          this.isConnected = false;
+          this.connected = false;
           resolve(this.cache);
         });
         this.cache.on('error', (err) => {

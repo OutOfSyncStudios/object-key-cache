@@ -56,10 +56,10 @@ With noted exceptions, all functions are Promise-based (meaning they return a Pr
 Create a new ObjectKeyCache client with the passed options, credentials, and logger. The `options` support only value `failback` which defaults to `true` and causes any connection attempts to Redis to fail-back to the memory Cache. Any other options provided are passed along to the Redis or MemoryCache `createClient` function. If [`redisCredentials`](#redis-credentials) are passed, then ObjectKeyCache will attempt to connect to Redis. If they are omitted or set `null` then Memory Cache is used. The [`log`](#logging-obj) is a Logging object outlined below.
 
 ## .connect() ⇒ Promise
-Connects to the cache and set the `isConnected` flag to `true`. The Promise resolves to the cache connection.
+Connects to the cache and set the `connected` flag to `true`. The Promise resolves to the cache connection.
 
 ## .close() ⇒ Promise
-Disconnects from the cache and set the `isConnected` flag to `false`. The promise resolves to the cache connection.
+Disconnects from the cache and set the `connected` flag to `false`. The promise resolves to the cache connection.
 
 ## .calcObjKey(obj) ⇒ string
 Returns the SHA256 Hash of the message resulting from the JSON stringified `obj`.
