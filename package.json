@@ -1,6 +1,6 @@
 {
   "name": "@mediaxpost/object-key-cache",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A Promise-based, object-key, cache extension for Redis and MemoryCache.",
   "main": "index.js",
   "scripts": {
