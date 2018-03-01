@@ -73,6 +73,40 @@ describe('Object Key Cache - MemoryCache', () => {
         done(err);
       });
   });
+  it('setAsync', (done) => {
+    cache
+      .setAsync('TestKey', 'TestValue')
+      .then(() => {
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+
+  it('getAsync', (done) => {
+    cache
+      .getAsync('TestKey')
+      .then((reply) => {
+        expect(reply).to.be.equal('TestValue');
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+  it('delAsync', (done) => {
+    cache
+      .delAsync('TestKey')
+      .then(() => {
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+
+
 
   it('hset', (done) => {
     cache
@@ -116,6 +150,38 @@ describe('Object Key Cache - MemoryCache', () => {
         done(err);
       });
   });
+  it('hsetAsync', (done) => {
+    cache
+      .hsetAsync('TestKey', 'TestField', 'TestValue')
+      .then(() => {
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+  it('hgetAsync', (done) => {
+    cache
+      .hgetAsync('TestKey', 'TestField')
+      .then((reply) => {
+        expect(reply).to.be.equal('TestValue');
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+  it('hdelAsync', (done) => {
+    cache
+      .hdel('TestKey', 'TestField')
+      .then(() => {
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+
   it('del (hset key)', (done) => {
     cache
       .del('TestKey')
@@ -188,6 +254,39 @@ describe('Object Key Cache - MemoryCache', () => {
       });
   });
 
+  it('osetAsync', (done) => {
+    cache
+      .osetAsync(testObj, JSON.stringify(testObj))
+      .then(() => {
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+  it('ogetAsync', (done) => {
+    cache
+      .ogetAsync(testObj)
+      .then((reply) => {
+        expect(reply).to.be.equal(JSON.stringify(testObj));
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+
+  it('odelAsync', (done) => {
+    cache
+      .odelAsync(testObj)
+      .then(() => {
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+
   it('ohset', (done) => {
     cache
       .ohset('TestKey', testObj, JSON.stringify(testObj))
@@ -227,6 +326,40 @@ describe('Object Key Cache - MemoryCache', () => {
       .ohget('TestKey', testObj)
       .then((reply) => {
         expect(__.isUnset(reply)).to.be.equal(true);
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+
+  it('ohsetAsync', (done) => {
+    cache
+      .ohsetAsync('TestKey', testObj, JSON.stringify(testObj))
+      .then(() => {
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+
+  it('ohgetAsync', (done) => {
+    cache
+      .ohgetAsync('TestKey', testObj)
+      .then((reply) => {
+        expect(reply).to.be.equal(JSON.stringify(testObj));
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+
+  it('ohdelAsync', (done) => {
+    cache
+      .ohdelAsync('TestKey', testObj)
+      .then(() => {
         done();
       })
       .catch((err) => {
