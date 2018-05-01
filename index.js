@@ -26,6 +26,33 @@ class ObjectKeyCache {
     this.cache = null;
   }
 
+  // Connects the ObjectKeyCache to an existing and already connected RedisClient
+  attachToClient(redisClient) {
+    if (!(redisClient instanceof redis.RedisClient)) {
+      throw new Error('The client provided is not an active RedisClient');
+    } else if (!redisClient.connected) {
+      throw new Error('The RedisClient is not connected');
+    } else if (__.hasValue(this.cache) && this.connected) {
+      throw new Error('Cannot replace active redis connection, disconnect from Redis first.');
+    }
+
+    this.creds = __.pick(redisClient.options, ['host', 'port']);
+    this.cacheConfig = __.omit(redisClient.options, ['host', 'port']);
+    this.cache = redisClient;
+    this.connected = true;
+  }
+
+  detachFromClient() {
+    if (!this.connected || __.this.isUnset(this.cache)) {
+      throw new Error('Cannot detach when there is no connection.');
+    } else if (this.cache instanceof MemoryCache) {
+      throw new Error('Cannot detach when using MemoryCache.');
+    }
+    
+    this.connected = false;
+    this.cache = null;
+  }
+
   // Returns a promise that signifies when the connection to the cache is ready
   connect() {
     return new Promise((resolve, reject) => {
