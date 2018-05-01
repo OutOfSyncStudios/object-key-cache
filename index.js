@@ -43,12 +43,12 @@ class ObjectKeyCache {
   }
 
   detachFromClient() {
-    if (!this.connected || __.this.isUnset(this.cache)) {
+    if (!this.connected || __.isUnset(this.cache)) {
       throw new Error('Cannot detach when there is no connection.');
     } else if (this.cache instanceof MemoryCache) {
       throw new Error('Cannot detach when using MemoryCache.');
     }
-    
+
     this.connected = false;
     this.cache = null;
   }

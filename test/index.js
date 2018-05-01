@@ -4,6 +4,7 @@
 const __ = require('@mediaxpost/lodashext');
 const chai = require('chai');
 const expect = chai.expect;
+const redis = require('redis');
 const ObjectKeyCache = require('..');
 
 const testObj = { where: { dealerID: -1, offset: 0, limit: 20, table: 'vehicle' } };
@@ -625,3 +626,30 @@ describe('Object Key Cache -- Bad Redis Credentials', () => {
       });
   });
 });
+
+describe('ObjectKeyCache -- External Redis', () => {
+  let client;
+  let cache;
+  before((done) => {
+    cache = new ObjectKeyCache();
+    client = redis.createClient(6379, 'localhost');
+    client.on('connect', () => {
+      done();
+    });
+    client.on('error', (err) => {
+      done(err);
+    });
+  });
+
+  it('attachToClient', () => {
+    cache.attachToClient(client);
+    expect(cache.connected).to.be.equal(true);
+    expect(cache.cache).to.be.instanceof(redis.RedisClient);
+  });
+
+  it('detachFromClient', () => {
+    cache.detachFromClient();
+    expect(cache.connected).to.be.equal(false);
+    expect(cache.cache).to.be.equal(null);
+  });
+})
