@@ -6,6 +6,7 @@ services:
 before_script:
 - npm install -g gulp-cli
 script:
+- npm rebuild
 - gulp
 - npm run coverage
 cache:
