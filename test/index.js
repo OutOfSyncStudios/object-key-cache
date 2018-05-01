@@ -652,4 +652,4 @@ describe('ObjectKeyCache -- External Redis', () => {
     expect(cache.connected).to.be.equal(false);
     expect(cache.cache).to.be.equal(null);
   });
-})
+});
