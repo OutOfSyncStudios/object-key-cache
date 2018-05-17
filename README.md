@@ -61,53 +61,53 @@ Attaches an unconnected ObjectKeyCache to an already existing and connected Redi
 ## .detachFromClient()
 Detaches ObjectKeyCache from a connected RedisClient.
 
-## .connect() ⇒ Promise
+## .connect() &#x27fe; Promise
 Connects to the cache and set the `connected` flag to `true`. The Promise resolves to the cache connection.
 
-## .close() ⇒ Promise
+## .close() &#x27fe; Promise
 Disconnects from the cache and set the `connected` flag to `false`. The promise resolves to the cache connection.
 
-## .calcObjKey(obj) ⇒ string
+## .calcObjKey(obj) &#x27fe; string
 Returns the SHA256 Hash of the message resulting from the JSON stringified `obj`.
 
-## .clear() ⇒ Promise
+## .clear() &#x27fe; Promise
 Clears the cache for the currently connected database within the cache. This is equivalent to running `FLUSHDB`.  The promise resolves to the Redis/MemoryCache messages (usually 'OK').
 
-## .oget(obj) ⇒ Promise
+## .oget(obj) &#x27fe; Promise
 Retrieves a value stored with the object key `obj`. The promise resolves to the result or `null` if it doesn't exist.
 
-## .oset(obj, value) ⇒ Promise
+## .oset(obj, value) &#x27fe; Promise
 Sets a value with an object key `obj`. The promise resolves to the Redis/MemoryCache messages (usually 'OK').
 
-## .odel(obj) ⇒ Promise
+## .odel(obj) &#x27fe; Promise
 Deletes the object key `obj`. The promise resolves to the Redis/MemoryCache messages (usually 'OK').
 
-## .ohget(hash, obj) ⇒ Promise
+## .ohget(hash, obj) &#x27fe; Promise
 Retrieves the Hash object key `obj` field that is scoped to the `hash`. The promise resolves to the result or `null` if it doesn't exist.
 
-## .ohset(hash, obj, value) ⇒ Promise
+## .ohset(hash, obj, value) &#x27fe; Promise
 Sets the Hash object key `obj` field that is scoped to the `hash` to value `value`. The promise resolves to the Redis/MemoryCache messages (usually 'OK').
 
-## .ohdel(hash, obj) ⇒ Promise
+## .ohdel(hash, obj) &#x27fe; Promise
 Deletes the object key `obj` field scoped to the `hash`. The promise resolves to the Redis/MemoryCache messages (usually 'OK').
 
-## .get(key) ⇒ Promise
+## .get(key) &#x27fe; Promise
 Retrieves the `key` from the cache. The promise resolves to the result or `null` if it does not exist.
 
-## .set(key, value) ⇒ Promise
+## .set(key, value) &#x27fe; Promise
 Sets the `key` to the `value`. The promise resolves to the Redis/MemoryCache messages (usually 'OK').
 
-## .del(key) ⇒ Promise
+## .del(key) &#x27fe; Promise
 Deletes the `key`. The promise resolves to the Redis/MemoryCache messages (usually 'OK').
 
-## .hget(hash, field) ⇒ Promise
+## .hget(hash, field) &#x27fe; Promise
 Retrieves the `field` that is scoped to the `hash`. The promise resolves to the result or `null` if it does not exist.
 
-## .hset(hash, field, value) ⇒ Promise
+## .hset(hash, field, value) &#x27fe; Promise
 Sets the `field` that is scoped to the `hash` to the `value`. The promise resolves to the Redis/MemoryCache messages (usually 'OK').
 
 
-## .hdel(hash, field) ⇒ Promise
+## .hdel(hash, field) &#x27fe; Promise
 Deletes the `field` scoped to the `hash`. The promise resolves to the Redis/MemoryCache messages (usually 'OK').
 
 # [Appendix](#appendix)
