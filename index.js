@@ -22,6 +22,12 @@ class ObjectKeyCache {
     // config.cache;
     // this.ttl = this.cacheConfig.ttl;
     this.creds = credentials;
+    if (__.isUnset(this.creds)) {
+      this.creds = {
+        host: null,
+        port: null
+      };
+    }
     // config.credentials.redis;
     this.cache = null;
   }
@@ -66,7 +72,8 @@ class ObjectKeyCache {
         reject(err);
       });
 
-      if (__.isUnset(this.creds)) {
+      this.creds.port = this.creds.port || 3306;
+      if (__.isUnset(this.creds.host)) {
         this.cache = memCache.createClient(this.cacheConfig);
       } else {
         this.cache = redis.createClient(this.creds.port, this.creds.host, this.cacheConfig);
