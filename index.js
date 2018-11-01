@@ -32,7 +32,7 @@ class ObjectKeyCache {
     this.cache = null;
   }
 
-  // Connects the ObjectKeyCache to an existing and already connected RedisClient
+  // Connects the ObjectKeyCache to an existing and already connected RedisClient or MemoryCache
   attachToClient(client) {
     if (!(client instanceof redis.RedisClient) && !(client instanceof MemoryCache)) {
       throw new Error('The client provided is not an active RedisClient or MemoryCache');
