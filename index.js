@@ -12,13 +12,13 @@ const memCache = new MemoryCache();
 bluebird.promisifyAll(redis.RedisClient.prototype);
 bluebird.promisifyAll(redis.Multi.prototype);
 
-const defaults = { failback: true };
+const defaults = { failover: true };
 
 class ObjectKeyCache {
   constructor(config, credentials, logger) {
     this.logger = logger || new LogStub();
     this.connected = false;
-    this.cacheConfig = __.merge(Object.assign(defaults), config || {});
+    this.cacheConfig = __.merge(Object.assign({}, defaults), config || {});
     // config.cache;
     // this.ttl = this.cacheConfig.ttl;
     this.creds = credentials;
@@ -32,29 +32,31 @@ class ObjectKeyCache {
     this.cache = null;
   }
 
-  // Connects the ObjectKeyCache to an existing and already connected RedisClient
-  attachToClient(redisClient) {
-    if (!(redisClient instanceof redis.RedisClient)) {
-      throw new Error('The client provided is not an active RedisClient');
-    } else if (!redisClient.connected) {
-      throw new Error('The RedisClient is not connected');
+  // Connects the ObjectKeyCache to an existing and already connected RedisClient or MemoryCache
+  attachToClient(client) {
+    if (!(client instanceof redis.RedisClient) && !(client instanceof MemoryCache)) {
+      throw new Error('The client provided is not an active RedisClient or MemoryCache');
+    } else if (!client.connected && (client instanceof redis.RedisClient)) {
+      throw new Error('The Redis client is not connected');
     } else if (__.hasValue(this.cache) && this.connected) {
       throw new Error('Cannot replace active redis connection, disconnect from Redis first.');
     }
 
-    this.creds = __.pick(redisClient.options, ['host', 'port']);
-    this.cacheConfig = __.omit(redisClient.options, ['host', 'port']);
-    this.cache = redisClient;
+    if (client instanceof redis.RedisClient) {
+      this.creds = __.pick(client.options, ['host', 'port']);
+    } else {
+      this.creds = {};
+    }
+
+    this.cacheConfig = __.omit(client.options, ['host', 'port']);
+    this.cache = client;
     this.connected = true;
   }
 
   detachFromClient() {
     if (!this.connected || __.isUnset(this.cache)) {
       throw new Error('Cannot detach when there is no connection.');
-    } else if (this.cache instanceof MemoryCache) {
-      throw new Error('Cannot detach when using MemoryCache.');
     }
-
     this.connected = false;
     this.cache = null;
   }
@@ -63,7 +65,7 @@ class ObjectKeyCache {
   connect() {
     return new Promise((resolve, reject) => {
       memCache.once('connect', () => {
-        this.logger.debug('Cache Connected');
+        this.logger.debug('Cache Connected (Memory)');
         this.connected = true;
         resolve(this.cache);
       });
@@ -78,15 +80,15 @@ class ObjectKeyCache {
       } else {
         this.cache = redis.createClient(this.creds.port, this.creds.host, this.cacheConfig);
         this.cache.once('connect', () => {
-          this.logger.debug('Cache Connected');
+          this.logger.debug('Cache Connected (Redis)');
           this.connected = true;
           resolve(this.cache);
         });
         this.cache.once('error', (err) => {
-          if (this.cacheConfig.failback) {
+          if (this.cacheConfig.failover) {
             this.logger.debug('Redis failed with error -- Fallback to MemoryCache');
             this.logger.error(err);
-            this.cache = memCache.createClient();
+            this.cache = memCache.createClient(this.cacheConfig);
           } else {
             this.logger.debug('Cache Connection Failed');
             reject(err);
