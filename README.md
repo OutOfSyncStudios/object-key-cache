@@ -5,8 +5,8 @@
 [![Actual version published on npm](http://img.shields.io/npm/v/@outofsync/object-key-cache.svg)](https://www.npmjs.org/package/@outofsync/object-key-cache)
 [![Travis build status](https://travis-ci.org/OutOfSyncStudios/object-key-cache.svg)](https://www.npmjs.org/package/@outofsync/object-key-cache)
 [![Total npm module downloads](http://img.shields.io/npm/dt/@outofsync/object-key-cache.svg)](https://www.npmjs.org/package/@outofsync/object-key-cache)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1d343b0fd03947e494cdddc2966ca79b)](https://www.codacy.com/app/OutOfSyncStudios/object-key-cache?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=OutOfSyncStudios/object-key-cache&amp;utm_campaign=Badge_Grade)
-[![Codacy Coverage Badge](https://api.codacy.com/project/badge/Coverage/1d343b0fd03947e494cdddc2966ca79b)](https://www.codacy.com/app/OutOfSyncStudios/object-key-cache?utm_source=github.com&utm_medium=referral&utm_content=OutOfSyncStudios/object-key-cache&utm_campaign=Badge_Coverage)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c75048e51d8c4a2a85ba4ac3d2ec6e97)](https://www.codacy.com/app/OutOfSyncStudios/object-key-cache?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=OutOfSyncStudios/object-key-cache&amp;utm_campaign=Badge_Grade)
+[![Codacy Coverage Badge](https://api.codacy.com/project/badge/Coverage/c75048e51d8c4a2a85ba4ac3d2ec6e97)](https://www.codacy.com/app/OutOfSyncStudios/object-key-cache?utm_source=github.com&utm_medium=referral&utm_content=OutOfSyncStudios/object-key-cache&utm_campaign=Badge_Coverage)
 [![Dependencies badge](https://david-dm.org/OutOfSyncStudios/object-key-cache/status.svg)](https://david-dm.org/OutOfSyncStudios/object-key-cache?view=list)
 
 `object-key-cache` is a promise-based, object-key, cache extension for the [Redis](https://www.npmjs.com/package/redis) and [memory-cache](https://www.npmjs.com/package/@outofsync/memory-cache) modules.
