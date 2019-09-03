@@ -14,7 +14,7 @@
     "build": "gulp",
     "fix": "gulp fix",
     "lint": "gulp lint",
-    "coverage": "nyc --reporter=lcov mocha && cat ./coverage/lcov.info --exit | codacy-coverage",
+    "coverage": "nyc --reporter=lcov mocha --exit && cat ./coverage/lcov.info | codacy-coverage",
     "pretty": "gulp pretty"
   },
   "repository": {
