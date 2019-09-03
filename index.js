@@ -1,8 +1,8 @@
 // index.js
 
 // Dependencies
-const __ = require('@mediaxpost/lodashext');
-const MemoryCache = require('@mediaxpost/memory-cache');
+const __ = require('@outofsync/lodash-ex');
+const MemoryCache = require('@outofsync/memory-cache');
 const LogStub = require('logstub');
 const redis = require('redis');
 const bluebird = require('bluebird');
@@ -12,7 +12,16 @@ const memCache = new MemoryCache();
 bluebird.promisifyAll(redis.RedisClient.prototype);
 bluebird.promisifyAll(redis.Multi.prototype);
 
-const defaults = { failover: true };
+const defaults = {
+  failover: true //,
+  // retry_strategy: (options) => {
+  //   if (options.error.code === 'ECONNREFUSED') {
+  //     // This will suppress the ECONNREFUSED unhandled exception
+  //     // that results in app crash
+  //     return new Error('The server refused the connection');
+  //   }
+  // }
+};
 
 class ObjectKeyCache {
   constructor(config, credentials, logger) {
@@ -29,6 +38,8 @@ class ObjectKeyCache {
       };
     }
     // config.credentials.redis;
+    this.redisCache = null;
+    this.memCache = null;
     this.cache = null;
   }
 
@@ -63,35 +74,60 @@ class ObjectKeyCache {
 
   // Returns a promise that signifies when the connection to the cache is ready
   connect() {
+    if (this.connected) {
+      return Promise.reject(new Error('Object Key Cache is already connected'));
+    }
     return new Promise((resolve, reject) => {
-      memCache.once('connect', () => {
+      this.memCache = memCache.createClient(this.cacheConfig);
+      this.creds.port = this.creds.port || 6379;
+      if (__.isUnset(this.creds.host)) {
         this.logger.debug('Cache Connected (Memory)');
+        this.cache = this.memCache;
         this.connected = true;
         resolve(this.cache);
-      });
-      memCache.once('error', (err) => {
-        this.logger.debug('Cache Connection Failed');
-        reject(err);
-      });
-
-      this.creds.port = this.creds.port || 3306;
-      if (__.isUnset(this.creds.host)) {
-        this.cache = memCache.createClient(this.cacheConfig);
       } else {
-        this.cache = redis.createClient(this.creds.port, this.creds.host, this.cacheConfig);
-        this.cache.once('connect', () => {
+        this.redisCache = redis.createClient(this.creds.port, this.creds.host, this.cacheConfig);
+        this.redisCache.once('connect', () => {
           this.logger.debug('Cache Connected (Redis)');
+          // This also has the benefit of automatically switching to the Redis client when it becomes
+          // available, if there was a connection problem initially
+          this.cache = this.redisCache;
+          // Only resolve when not already connected
+          if (!this.connected) {
+            resolve(this.cache);
+          }
           this.connected = true;
-          resolve(this.cache);
         });
-        this.cache.once('error', (err) => {
+        this.redisCache.once('error', (err) => {
           if (this.cacheConfig.failover) {
-            this.logger.debug('Redis failed with error -- Fallback to MemoryCache');
+            this.logger.debug('Redis failed with error failing over to MemoryCache');
             this.logger.error(err);
-            this.cache = memCache.createClient(this.cacheConfig);
+            this.cache = this.memCache;
+            // Only resolve when not already connected
+            if (!this.connected) {
+              resolve(this.cache);
+            }
+            this.connected = true;
           } else {
             this.logger.debug('Cache Connection Failed');
             reject(err);
+          }
+        });
+        this.redisCache.on('connect', () => {
+          if (this.connected && this.cache && this.cache instanceof MemoryCache) {
+            this.logger.debug('Redis connection came back, reverting from MemoryCache to RedisClient');
+          }
+        });
+        this.redisCache.on('error', (err) => {
+          // Trap and log any non ECONNREFUSED errors that may get called after we've already caught the first
+          // Redis will bomb out without this if there is no connection as ECONNREFUSED is called multiple times
+          // as the Redis client attempts to reconnect continuously
+          if (__.isUnset(err.errno) || (err.errno && err.errno !== 'ECONNREFUSED')) {
+            this.logger.error(err);
+          }
+          if (err.errno && err.errno === 'ECONNREFUSED' && this.connected && this.cache instanceof redis.RedisClient) {
+            this.logger.debug('Redis connection went away, reverting to MemoryCache');
+            this.cache = this.memCache;
           }
         });
       }
@@ -245,9 +281,11 @@ class ObjectKeyCache {
     let prm;
     if (this.connected) {
       prm = new Promise((resolve, reject) => {
-        this.cache.on('end', () => {
+        this.cache.once('end', () => {
           this.logger.debug('Cache Closed');
           this.connected = false;
+          this.redisCache = null;
+          this.memCache = null;
           resolve(this.cache);
         });
         this.cache.on('error', (err) => {

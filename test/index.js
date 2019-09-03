@@ -1,12 +1,12 @@
 // test/index.js
 
 // Dependancies
-const __ = require('@mediaxpost/lodashext');
+const __ = require('@outofsync/lodash-ex');
 const chai = require('chai');
 const expect = chai.expect;
 const redis = require('redis');
 const ObjectKeyCache = require('..');
-const MemoryCache = require('@mediaxpost/memory-cache');
+const MemoryCache = require('@outofsync/memory-cache');
 
 const testObj = { where: { dealerID: -1, offset: 0, limit: 20, table: 'vehicle' } };
 
@@ -638,10 +638,14 @@ describe('ObjectKeyCache -- External Cache', () => {
     client.on('connect', () => {
       done();
     });
-    client.on('error', (err) => {
+    client.on('error', () => {
       client = new MemoryCache();
       done();
     });
+  });
+
+  after(() => {
+    client.quit();
   });
 
   it('attachToClient', () => {
