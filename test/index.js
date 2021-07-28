@@ -4,8 +4,6 @@
 const isNil = require('lodash.isnil');
 const chai = require('chai');
 const expect = chai.expect;
-const redis = require('redis');
-const sinon = require('sinon');
 const ObjectKeyCache = require('..');
 const MemoryCache = require('@outofsync/memory-cache');
 
