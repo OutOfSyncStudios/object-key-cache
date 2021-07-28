@@ -1,8 +1,9 @@
 {
   "name": "@outofsync/object-key-cache",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "A Promise-based, object-key, cache extension for Redis and MemoryCache.",
   "main": "index.js",
+  "types": "index.d.ts",
   "husky": {
     "hooks": {
       "pre-commit": "npm run build",
