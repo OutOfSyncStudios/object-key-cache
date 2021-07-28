@@ -1,7 +1,12 @@
 // index.js
 
 // Dependencies
-const __ = require('@outofsync/lodash-ex');
+const __ = {
+  isNil: require('lodash.isnil'),
+  merge: require('lodash.merge'),
+  pick: require('lodash.pick'),
+  omit: require('lodash.omit'),
+};
 const MemoryCache = require('@outofsync/memory-cache');
 const LogStub = require('logstub');
 const redis = require('redis');
@@ -13,7 +18,7 @@ bluebird.promisifyAll(redis.RedisClient.prototype);
 bluebird.promisifyAll(redis.Multi.prototype);
 
 const defaults = {
-  failover: true //,
+  failover: true,
   // retry_strategy: (options) => {
   //   if (options.error.code === 'ECONNREFUSED') {
   //     // This will suppress the ECONNREFUSED unhandled exception
@@ -31,12 +36,13 @@ class ObjectKeyCache {
     // config.cache;
     // this.ttl = this.cacheConfig.ttl;
     this.creds = credentials;
-    if (__.isUnset(this.creds)) {
+    if (__.isNil(this.creds)) {
       this.creds = {
         host: null,
         port: null
       };
     }
+    this.algorithm = config?.algorithm || 'sha256';
     // config.credentials.redis;
     this.redisCache = null;
     this.memCache = null;
@@ -49,7 +55,7 @@ class ObjectKeyCache {
       throw new Error('The client provided is not an active RedisClient or MemoryCache');
     } else if (!client.connected && (client instanceof redis.RedisClient)) {
       throw new Error('The Redis client is not connected');
-    } else if (__.hasValue(this.cache) && this.connected) {
+    } else if (!__.isNil(this.cache) && this.connected) {
       throw new Error('Cannot replace active redis connection, disconnect from Redis first.');
     }
 
@@ -65,7 +71,7 @@ class ObjectKeyCache {
   }
 
   detachFromClient() {
-    if (!this.connected || __.isUnset(this.cache)) {
+    if (!this.connected || __.isNil(this.cache)) {
       throw new Error('Cannot detach when there is no connection.');
     }
     this.connected = false;
@@ -80,7 +86,7 @@ class ObjectKeyCache {
     return new Promise((resolve, reject) => {
       this.memCache = memCache.createClient(this.cacheConfig);
       this.creds.port = this.creds.port || 6379;
-      if (__.isUnset(this.creds.host)) {
+      if (__.isNil(this.creds.host)) {
         this.logger.debug('Cache Connected (Memory)');
         this.cache = this.memCache;
         this.connected = true;
@@ -122,7 +128,7 @@ class ObjectKeyCache {
           // Trap and log any non ECONNREFUSED errors that may get called after we've already caught the first
           // Redis will bomb out without this if there is no connection as ECONNREFUSED is called multiple times
           // as the Redis client attempts to reconnect continuously
-          if (__.isUnset(err.errno) || (err.errno && err.errno !== 'ECONNREFUSED')) {
+          if (__.isNil(err.errno) || (err.errno && err.errno !== 'ECONNREFUSED')) {
             this.logger.error(err);
           }
           if (err.errno && err.errno === 'ECONNREFUSED' && this.connected && this.cache instanceof redis.RedisClient) {
@@ -209,7 +215,7 @@ class ObjectKeyCache {
   calcObjKey(objKey) {
     const str = JSON.stringify(objKey).replace(/\n/g, '');
     // Stringify JSON and flatten string
-    const out = crypto.createHash('sha256').update(str)
+    const out = crypto.createHash(this.algorithm).update(str)
       .digest('hex');
     return out;
   }
