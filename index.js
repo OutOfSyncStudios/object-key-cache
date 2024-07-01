@@ -1,3 +1,4 @@
+/* eslint-disable no-prototype-builtins */
 // index.js
 
 // Dependencies
@@ -18,7 +19,7 @@ import MemoryCache from '@outofsync/memory-cache';
 const memCache = new MemoryCache();
 
 function isRedisClient(client) {
-  return RedisClient.prototype.isPrototypeOf(client);
+  return RedisClient.prototype.isPrototypeOf(RedisClient, client);
 }
 
 const defaults = {
