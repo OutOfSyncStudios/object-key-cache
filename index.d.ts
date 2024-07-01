@@ -1,6 +1,6 @@
 declare module 'object-key-cache';
 
-declare class ObjectKeyClass {
+declare class ObjectKeyCache {
   constructor(config: any, credentials: any, logger: any);
   attachToClient(client: any): void;
   detachFromClient(): void;
@@ -34,5 +34,5 @@ declare class ObjectKeyClass {
   close(): Promise<any>;
 }
 
-declare let obj: ObjectKeyClass;
+declare let obj: ObjectKeyCache;
 export default obj;
