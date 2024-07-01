@@ -20,7 +20,7 @@
     "build": "npm run lint && npm run test && npm run coverage",
     "fix": "eslint --fix",
     "lint": "eslint",
-    "coverage": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" npx jest --coverage",
+    "coverage": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" npx jest --coverage --forceExit",
     "pretty": "prettier **/*.js"
   },
   "repository": {
