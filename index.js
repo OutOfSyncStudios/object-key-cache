@@ -1,21 +1,25 @@
 // index.js
 
 // Dependencies
-const __ = {
-  isNil: require('lodash.isnil'),
-  merge: require('lodash.merge'),
-  pick: require('lodash.pick'),
-  omit: require('lodash.omit'),
-};
-const MemoryCache = require('@outofsync/memory-cache');
-const LogStub = require('logstub');
-const redis = require('redis');
-const bluebird = require('bluebird');
-const crypto = require('crypto');
+import __ from './lib/lodash-fns.js';
+
+import crypto from 'node:crypto';
+import LogStub from 'logstub';
+import redis from 'redis';
+import RedisClientBase from '@redis/client/dist/lib/client/index.js';
+const RedisClient = RedisClientBase.default;
+
+console.log(JSON.stringify(RedisClient));
+console.log(JSON.stringify(RedisClient.prototype));
+console.log(typeof RedisClient);
+console.log(Object.keys(RedisClient));
+import MemoryCache from '@outofsync/memory-cache';
 
 const memCache = new MemoryCache();
-bluebird.promisifyAll(redis.RedisClient.prototype);
-bluebird.promisifyAll(redis.Multi.prototype);
+
+function isRedisClient(client) {
+  return RedisClient.prototype.isPrototypeOf(client);
+}
 
 const defaults = {
   failover: true,
@@ -42,7 +46,7 @@ class ObjectKeyCache {
         port: null
       };
     }
-    this.algorithm = config?.algorithm || 'sha256';
+    this.algorithm = config?.algorithm || 'sha512';
     // config.credentials.redis;
     this.redisCache = null;
     this.memCache = null;
@@ -51,15 +55,15 @@ class ObjectKeyCache {
 
   // Connects the ObjectKeyCache to an existing and already connected RedisClient or MemoryCache
   attachToClient(client) {
-    if (!(client instanceof redis.RedisClient) && !(client instanceof MemoryCache)) {
+    if (!(client instanceof MemoryCache) && !isRedisClient(client)) {
       throw new Error('The client provided is not an active RedisClient or MemoryCache');
-    } else if (!client.connected && (client instanceof redis.RedisClient)) {
+    } else if (!client.connected && isRedisClient(client)) {
       throw new Error('The Redis client is not connected');
     } else if (!__.isNil(this.cache) && this.connected) {
       throw new Error('Cannot replace active redis connection, disconnect from Redis first.');
     }
 
-    if (client instanceof redis.RedisClient) {
+    if (client instanceof RedisClient) {
       this.creds = __.pick(client.options, ['host', 'port']);
     } else {
       this.creds = {};
@@ -93,6 +97,7 @@ class ObjectKeyCache {
         resolve(this.cache);
       } else {
         this.redisCache = redis.createClient(this.creds.port, this.creds.host, this.cacheConfig);
+        this.redisCache.connect();
         this.redisCache.once('connect', () => {
           this.logger.debug('Cache Connected (Redis)');
           // This also has the benefit of automatically switching to the Redis client when it becomes
@@ -131,7 +136,7 @@ class ObjectKeyCache {
           if (__.isNil(err.errno) || (err.errno && err.errno !== 'ECONNREFUSED')) {
             this.logger.error(err);
           }
-          if (err.errno && err.errno === 'ECONNREFUSED' && this.connected && this.cache instanceof redis.RedisClient) {
+          if (err.errno && err.errno === 'ECONNREFUSED' && this.connected && this.cache instanceof RedisClient) {
             this.logger.debug('Redis connection went away, reverting to MemoryCache');
             this.cache = this.memCache;
           }
@@ -307,4 +312,4 @@ class ObjectKeyCache {
   }
 }
 
-module.exports = ObjectKeyCache;
+export default ObjectKeyCache;

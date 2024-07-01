@@ -13,7 +13,9 @@
 
 Object Key Cache converts JavaScript Objects (Maps) into the key value used to look up data from cache. This is done by serializing the object into JSON (e.g. `JSON.stringify`) and then performing a SHA256 has on the resulting JSON string. This process helps preserve the uniqueness of the key for performing lookups. Once the key has been generated, the key-value pair is passed into the associated Oxxx functions (e.g. oget, oset, etc.)
 
-*Note:* SHA256 has a very low likelihood of key space collisions, but it is not impossible. With one billion messages there is approximately a 1 in 4.3 x 10<sup>60</sup> chance that two distinct strings will generate an identical SHA256 hash. This probability is negligible for most use cases; however, if a very large numbers of keys are expected to   be stored then consideration should be given to segregating data by a namespace based upon how it will be used within the cache to decrease any potential for collisions.
+*Note:* SHA512 has a very low likelihood of key space collisions, but it is not impossible. With one billion messages there is approximately a 1 in 1.4 x 10<sup>77</sup> chance that two distinct strings will generate an identical SHA512 hash. This probability is negligible for most use cases; however, if a very large numbers of keys are expected to be stored then consideration should be given to segregating data by a namespace based upon how it will be used within the cache to decrease any potential for collisions.
+
+This module has been updated to support NodeJS 18 or higher.
 
 # [Installation](#installation)
 <a name="installation"></a>

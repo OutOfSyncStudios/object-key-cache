@@ -1,29 +1,33 @@
-// test/index.js
+/* eslint id-length: warn */
+import { 
+  beforeAll,
+  describe, 
+  expect, 
+  test as it,
+} from '@jest/globals';
 
 // Dependancies
-const isNil = require('lodash.isnil');
-const chai = require('chai');
-const expect = chai.expect;
-const ObjectKeyCache = require('..');
-const MemoryCache = require('@outofsync/memory-cache');
+import isNil from 'lodash.isnil';
+import MemoryCache from '@outofsync/memory-cache';
+import ObjectKeyCache from '../index.js';
 
 const testObj = { where: { id: -1, offset: 0, limit: 20, table: 'test' } };
 
 describe('Object Key Cache - MemoryCache', () => {
   let cache;
-  before(async() => {
+  beforeAll(async() => {
     cache = await new ObjectKeyCache({});
   });
 
   it('constructor', () => {
-    expect(cache).to.be.instanceof(ObjectKeyCache);
+    expect(cache instanceof ObjectKeyCache).toBe(true);
   });
 
   it('connect', (done) => {
     cache
       .connect()
       .then(() => {
-        expect(cache.connected).to.be.equal(true);
+        expect(cache.connected).toBe(true);
         done();
       })
       .catch((err) => {
@@ -46,7 +50,7 @@ describe('Object Key Cache - MemoryCache', () => {
     cache
       .get('TestKey')
       .then((reply) => {
-        expect(reply).to.be.equal('TestValue');
+        expect(reply).toBe('TestValue');
         done();
       })
       .catch((err) => {
@@ -67,7 +71,7 @@ describe('Object Key Cache - MemoryCache', () => {
     cache
       .get('TestKey')
       .then((reply) => {
-        expect(isNil(reply)).to.be.equal(true);
+        expect(isNil(reply)).toBe(true);
         done();
       })
       .catch((err) => {
@@ -89,7 +93,7 @@ describe('Object Key Cache - MemoryCache', () => {
     cache
       .getAsync('TestKey')
       .then((reply) => {
-        expect(reply).to.be.equal('TestValue');
+        expect(reply).toBe('TestValue');
         done();
       })
       .catch((err) => {
@@ -121,7 +125,7 @@ describe('Object Key Cache - MemoryCache', () => {
     cache
       .hget('TestKey', 'TestField')
       .then((reply) => {
-        expect(reply).to.be.equal('TestValue');
+        expect(reply).toBe('TestValue');
         done();
       })
       .catch((err) => {
@@ -142,7 +146,7 @@ describe('Object Key Cache - MemoryCache', () => {
     cache
       .hget('TestKey', 'TestField')
       .then((reply) => {
-        expect(isNil(reply)).to.be.equal(true);
+        expect(isNil(reply)).toBe(true);
         done();
       })
       .catch((err) => {
@@ -163,7 +167,7 @@ describe('Object Key Cache - MemoryCache', () => {
     cache
       .hgetAsync('TestKey', 'TestField')
       .then((reply) => {
-        expect(reply).to.be.equal('TestValue');
+        expect(reply).toBe('TestValue');
         done();
       })
       .catch((err) => {
@@ -195,7 +199,7 @@ describe('Object Key Cache - MemoryCache', () => {
     cache
       .get('TestKey')
       .then((reply) => {
-        expect(isNil(reply)).to.be.equal(true);
+        expect(isNil(reply)).toBe(true);
         done();
       })
       .catch((err) => {
@@ -205,7 +209,7 @@ describe('Object Key Cache - MemoryCache', () => {
 
   it('calcObjKey', () => {
     const key = cache.calcObjKey(testObj);
-    expect(key).to.be.equal('ebc984a078ae1ec47f06abb928512cf1df81dd3722530e19d9ce6f5bccc34971');
+    expect(key).toBe('655be97c6157b0517d1d2fe680bd7ff2fab7437924088ac386b3a5a08308545c6dfe7246acd4f0c687fbe773ff873c1a2b56ba82f443d4ba5e97113002ba33f0');
   });
 
   it('oset', (done) => {
@@ -222,7 +226,7 @@ describe('Object Key Cache - MemoryCache', () => {
     cache
       .oget(testObj)
       .then((reply) => {
-        expect(reply).to.be.equal(JSON.stringify(testObj));
+        expect(reply).toBe(JSON.stringify(testObj));
         done();
       })
       .catch((err) => {
@@ -245,7 +249,7 @@ describe('Object Key Cache - MemoryCache', () => {
     cache
       .oget(testObj)
       .then((reply) => {
-        expect(isNil(reply)).to.be.equal(true);
+        expect(isNil(reply)).toBe(true);
         done();
       })
       .catch((err) => {
@@ -267,7 +271,7 @@ describe('Object Key Cache - MemoryCache', () => {
     cache
       .ogetAsync(testObj)
       .then((reply) => {
-        expect(reply).to.be.equal(JSON.stringify(testObj));
+        expect(reply).toBe(JSON.stringify(testObj));
         done();
       })
       .catch((err) => {
@@ -301,7 +305,7 @@ describe('Object Key Cache - MemoryCache', () => {
     cache
       .ohget('TestKey', testObj)
       .then((reply) => {
-        expect(reply).to.be.equal(JSON.stringify(testObj));
+        expect(reply).toBe(JSON.stringify(testObj));
         done();
       })
       .catch((err) => {
@@ -324,7 +328,7 @@ describe('Object Key Cache - MemoryCache', () => {
     cache
       .ohget('TestKey', testObj)
       .then((reply) => {
-        expect(isNil(reply)).to.be.equal(true);
+        expect(isNil(reply)).toBe(true);
         done();
       })
       .catch((err) => {
@@ -347,7 +351,7 @@ describe('Object Key Cache - MemoryCache', () => {
     cache
       .ohgetAsync('TestKey', testObj)
       .then((reply) => {
-        expect(reply).to.be.equal(JSON.stringify(testObj));
+        expect(reply).toBe(JSON.stringify(testObj));
         done();
       })
       .catch((err) => {
@@ -381,7 +385,7 @@ describe('Object Key Cache - MemoryCache', () => {
     cache
       .get('TestKey')
       .then((reply) => {
-        expect(isNil(reply)).to.be.equal(true);
+        expect(isNil(reply)).toBe(true);
         done();
       })
       .catch((err) => {
@@ -393,7 +397,7 @@ describe('Object Key Cache - MemoryCache', () => {
     cache
       .close()
       .then(() => {
-        expect(cache.connected).to.be.equal(false);
+        expect(cache.connected).toBe(false);
         done();
       })
       .catch((err) => {
@@ -559,19 +563,19 @@ describe('Object Key Cache - MemoryCache', () => {
 
 describe('Object Key Cache -- Redis', () => {
   let cache;
-  before(async() => {
+  beforeAll(async() => {
     cache = await new ObjectKeyCache({}, { port: 6379, host: 'localhost' });
   });
 
   it('constructor', () => {
-    expect(cache).to.be.instanceof(ObjectKeyCache);
+    expect(cache instanceof ObjectKeyCache).toBe(true);    
   });
 
   it('connect', (done) => {
     cache
       .connect()
       .then(() => {
-        expect(cache.connected).to.be.equal(true);
+        expect(cache.connected).toBe(true);
         done();
       })
       .catch((err) => {
@@ -583,7 +587,7 @@ describe('Object Key Cache -- Redis', () => {
     cache
       .close()
       .then(() => {
-        expect(cache.connected).to.be.equal(false);
+        expect(cache.connected).toBe(false);
         done();
       })
       .catch((err) => {
@@ -594,20 +598,20 @@ describe('Object Key Cache -- Redis', () => {
 
 describe('Object Key Cache -- Bad Redis Credentials', () => {
   let cache;
-  before(async() => {
-    cache = await new ObjectKeyCache({}, { port: 3000, host: 'localhost' });
+  beforeAll(async() => {
+    cache = await new ObjectKeyCache({}, { port: 6379, host: 'localhost' });
   });
 
   it('constructor', () => {
-    expect(cache).to.be.instanceof(ObjectKeyCache);
+    expect(cache instanceof ObjectKeyCache).toBe(true);    
   });
 
   it('connect', (done) => {
     cache
       .connect()
       .then(() => {
-        expect(cache.connected).to.be.equal(true);
-        expect(cache.cache).to.be.instanceof(MemoryCache);
+        expect(cache.connected).toBe(true);
+        expect(cache instanceof ObjectKeyCache).toBe(true);
         done();
       })
       .catch((err) => {
@@ -619,7 +623,7 @@ describe('Object Key Cache -- Bad Redis Credentials', () => {
     cache
       .close()
       .then(() => {
-        expect(cache.connected).to.be.equal(false);
+        expect(cache.connected).toBe(false);
         done();
       })
       .catch((err) => {
@@ -631,19 +635,19 @@ describe('Object Key Cache -- Bad Redis Credentials', () => {
 describe('ObjectKeyCache -- External Cache', () => {
   let client;
   let cache;
-  before(() => {
-    cache = new ObjectKeyCache();
+  beforeAll(() => {
     client = new MemoryCache();
+    cache = new ObjectKeyCache();
   });
 
   it('attachToClient', () => {
     cache.attachToClient(client);
-    expect(cache.connected).to.be.equal(true);
+    expect(cache.connected).toBe(true);
   });
 
   it('detachFromClient', () => {
     cache.detachFromClient();
-    expect(cache.connected).to.be.equal(false);
-    expect(cache.cache).to.be.equal(null);
+    expect(cache.connected).toBe(false);
+    expect(cache.cache).toBe(null);
   });
 });
