@@ -34,5 +34,4 @@ declare class ObjectKeyCache {
   close(): Promise<any>;
 }
 
-declare let obj: ObjectKeyCache;
-export default obj;
+export default ObjectKeyCache;
