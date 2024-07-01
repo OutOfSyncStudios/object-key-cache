@@ -1,6 +1,7 @@
 declare module 'object-key-cache';
 
 declare class ObjectKeyClass {
+  constructor(config: any, credentials: any, logger: any);
   attachToClient(client: any): void;
   detachFromClient(): void;
   connect(): Promise<any>;
