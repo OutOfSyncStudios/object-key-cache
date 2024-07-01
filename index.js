@@ -10,10 +10,6 @@ import redis from 'redis';
 import RedisClientBase from '@redis/client/dist/lib/client/index.js';
 const RedisClient = RedisClientBase.default;
 
-console.log(JSON.stringify(RedisClient));
-console.log(JSON.stringify(RedisClient.prototype));
-console.log(typeof RedisClient);
-console.log(Object.keys(RedisClient));
 import MemoryCache from '@outofsync/memory-cache';
 
 const memCache = new MemoryCache();
